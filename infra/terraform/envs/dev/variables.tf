@@ -60,3 +60,9 @@ variable "node_subnet_type" {
   description = "Where to place nodes: public (cheapest, no NAT) or private (more prod-like, needs NAT for egress)"
   default     = "public"
 }
+
+variable "cluster_public_access_cidrs" {
+  type        = list(string)
+  description = "CIDR blocks allowed to access EKS public API endpoint"
+  default     = []
+}

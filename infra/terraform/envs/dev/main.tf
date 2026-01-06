@@ -27,5 +27,7 @@ module "eks" {
   node_max_size       = var.node_max_size
   node_capacity_type  = var.node_capacity_type
   node_subnet_type    = var.node_subnet_type
+
+  cluster_public_access_cidrs = var.cluster_public_access_cidrs
 }
 
