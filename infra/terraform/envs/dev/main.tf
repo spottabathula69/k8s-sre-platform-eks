@@ -18,6 +18,7 @@ module "eks" {
 
   vpc_id          = module.vpc.vpc_id
   public_subnets  = module.vpc.public_subnet_ids
+  # public_subnets  = [module.vpc.public_subnet_ids[0]]
   private_subnets = module.vpc.private_subnet_ids
 
   cluster_version     = var.cluster_version

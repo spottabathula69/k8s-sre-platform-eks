@@ -1,14 +1,19 @@
 output "vpc_id" {
-  value       = null
-  description = "VPC ID (wired in Step 2)"
+  value       = aws_vpc.this.id
+  description = "VPC ID"
 }
 
 output "public_subnet_ids" {
-  value       = []
-  description = "Public subnet IDs (wired in Step 2)"
+  value       = [for s in aws_subnet.public : s.id]
+  description = "Public subnet IDs"
 }
 
 output "private_subnet_ids" {
-  value       = []
-  description = "Private subnet IDs (wired in Step 2)"
+  value       = [for s in aws_subnet.private : s.id]
+  description = "Private subnet IDs"
+}
+
+output "azs" {
+  value       = local.azs
+  description = "Availability zones used"
 }

@@ -1,47 +1,98 @@
 # Production-Grade Kubernetes SRE Platform (EKS, Cost-Optimized)
 
-A production-thinking GitHub portfolio project that demonstrates Staff/Principal-level SRE judgment:
+A production-thinking GitHub portfolio project that demonstrates **Staff / Principal-level SRE judgment**:
+
 - Fully reproducible infrastructure (Terraform)
 - EKS + Helm-based deployments
 - Observability (Prometheus, Grafana, Alertmanager)
-- SRE controls: probes, HPA, PDB, rollouts
+- SRE controls: probes, HPA, PDB, controlled rollouts
 - Failure testing + runbooks + RCA templates
-- Clean repo structure + CI checks
+- Explicit tradeoffs: cost vs realism vs operability
+
+---
 
 ## Why this project
-This repo is designed to mirror real SRE work: secure-by-default, measurable reliability,
-clear operational playbooks, and explicitly documented tradeoffs (especially cost vs realism).
+
+This repository is designed to mirror **real SRE platform work**, not a demo cluster.
+
+The focus is on:
+- Clean bootstrap and teardown
+- Predictable operational behavior
+- Clear validation points
+- Explicit documentation of design decisions and tradeoffs
+
+---
 
 ## High-level Architecture
-- Terraform provisions: VPC, EKS, node group, IAM (IRSA/OIDC)
-- Platform installs: Ingress + kube-prometheus-stack (Prometheus/Grafana/Alertmanager)
-- App deployed via Helm chart with: probes, requests/limits, HPA, PDB, rollout strategy
-- Ops: failure tests, runbooks, RCA templates
+
+- **Terraform provisions**:
+  - VPC (cost-optimized, public subnets)
+  - EKS control plane
+  - Managed node groups
+  - IAM roles (OIDC / IRSA)
+
+- **Platform installs**:
+  - Ingress controller
+  - kube-prometheus-stack (Prometheus, Grafana, Alertmanager)
+
+- **Workloads**:
+  - Helm-deployed demo app
+  - Probes, requests/limits, HPA, PDB
+  - Controlled rollout strategies
+
+- **Operations**:
+  - Failure tests
+  - Runbooks
+  - RCA templates
 
 See: [docs/architecture.md](docs/architecture.md)
 
+---
+
 ## Cost Strategy (AWS)
-We optimize for the lowest reasonable cost while remaining interview-realistic.
+
+The platform is intentionally optimized for **low cost while remaining interview-realistic**:
+
+- No NAT Gateway (public subnets only for initial build)
+- Minimal node count and instance size
+- All infrastructure is fully destroyable
+
+Tradeoffs and future “production-mode” variants are documented.
+
 See: [docs/cost-notes.md](docs/cost-notes.md)
 
+---
+
 ## Repo Map
-- `infra/` Terraform (reproducible + destroyable)
-- `platform/` Helm charts + observability values + dashboards + alerts
-- `ops/` runbooks, RCA template, failure tests
-- `scripts/` helper scripts for common workflows
-- `.github/workflows/` CI checks
 
-## Quickstart (coming in next steps)
-1) Provision infra
-2) Configure kubectl
-3) Install platform components (ingress, monitoring)
-4) Deploy demo app (Helm)
-5) Validate dashboards/alerts
-6) Run failure tests
-7) Destroy everything
+- `infra/` — Terraform (reproducible + destroyable)
+- `platform/` — Helm charts, monitoring values, dashboards, alerts
+- `ops/` — runbooks, RCA templates, failure tests
+- `scripts/` — helper scripts
+- `.github/workflows/` — CI checks
 
-## Optional future enhancements
-- Datadog integration (optional / paid)
-- Centralized logging (Loki/OpenSearch)
-- GitOps (Argo CD) as an extension
-- Private nodes + NAT Gateway “production-mode” variant
+---
+
+## Prerequisites
+
+- AWS account (region: `us-west-2`)
+- AWS CLI v2
+- Terraform
+- kubectl
+
+### AWS Profile
+
+Infrastructure is provisioned using a **dedicated IAM user and CLI profile** to isolate blast radius.
+
+```bash
+export AWS_PROFILE=sre-platform
+export AWS_REGION=us-west-2
+aws sts get-caller-identity
+```
+
+---
+
+## Quickstart
+
+See: [docs/bootstrap.md](docs/bootstrap.md)
+
