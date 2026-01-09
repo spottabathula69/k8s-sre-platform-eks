@@ -13,6 +13,11 @@ output "private_subnet_ids" {
   description = "Private subnet IDs"
 }
 
+output "vpc_cidr_block" {
+  value       = aws_vpc.this.cidr_block
+  description = "VPC CIDR"
+}
+
 output "azs" {
   value       = local.azs
   description = "Availability zones used"
