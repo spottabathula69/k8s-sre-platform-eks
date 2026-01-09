@@ -80,19 +80,9 @@ See: [docs/cost-notes.md](docs/cost-notes.md)
 - Terraform
 - kubectl
 
-### AWS Profile
+### AWS account setup (required)
 
-Infrastructure is provisioned using a **dedicated IAM user and CLI profile** to isolate blast radius.
+This project assumes you use a dedicated AWS CLI named profile:
 
-```bash
-export AWS_PROFILE=sre-platform
-export AWS_REGION=us-west-2
-aws sts get-caller-identity
-```
-
----
-
-## Quickstart
-
-See: [docs/bootstrap.md](docs/bootstrap.md)
+[`docs/aws_account_setup.md`](docs/aws_account_setup.md)
 
