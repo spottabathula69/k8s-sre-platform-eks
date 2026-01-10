@@ -91,7 +91,7 @@ resource "aws_eks_cluster" "this" {
   vpc_config {
     subnet_ids              = distinct(concat(var.public_subnets, var.private_subnets))
     endpoint_public_access  = true
-    endpoint_private_access = false
+    endpoint_private_access = true
 
     public_access_cidrs     = var.cluster_public_access_cidrs
   }

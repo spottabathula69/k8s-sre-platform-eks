@@ -86,3 +86,10 @@ This project assumes you use a dedicated AWS CLI named profile:
 
 [`docs/aws_account_setup.md`](docs/aws_account_setup.md)
 
+## Quick Start
+1.  **Deploy Infrastructure**: `terraform apply` in `infra/envs/dev`
+2.  **Install Platform**: See `platform/` READMEs.
+3.  **Operations**:
+    *   **Monitor**: Grafana (admin/admin)
+    *   **Debug**: See [Runbooks](docs/runbooks/)
+    *   **Incident**: Use [RCA Template](docs/templates/rca.md)

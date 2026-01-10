@@ -1,0 +1,50 @@
+# Production-grade values for Podinfo (Sample App)
+# Chart: stefanprodan/podinfo
+
+# Replica configuration
+replicaCount: 2
+
+# Image
+image:
+  repository: ghcr.io/stefanprodan/podinfo
+  tag: 6.7.1
+
+# Resources required for HPA
+resources:
+  requests:
+    cpu: 100m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+# Horizontal Pod Autoscaler
+hpa:
+  enabled: true
+  maxReplicas: 10
+  minReplicas: 2
+  cpu: 50
+
+# Ingress Configuration
+ingress:
+  enabled: true
+  className: "nginx"
+  # Clean URL, exposing at root for simplicity in this demo
+  # In real life, might be /api/v1 or similar
+  path: /
+  hosts:
+    - host:  # Empty usually implies wildcard or use the IP
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+
+# Fault Injection & Probes
+# Podinfo has built-in probes, we ensure they are on.
+livenessProbe:
+  enabled: true
+readinessProbe:
+  enabled: true
+
+# Pod Disruption Budget
+podDisruptionBudget:
+  minAvailable: 1

@@ -1,33 +1,68 @@
+# Production-grade (Cost optimized) values for kube-prometheus-stack
+# Chart: prometheus-community/kube-prometheus-stack
+
+# Component Configuration
 grafana:
   enabled: true
-  adminPassword: admin
+  adminPassword: "admin" # Change this in production! using simple one for demo.
+  
   service:
     type: ClusterIP
+
+  # Resource efficiency
   resources:
     requests:
       cpu: 50m
       memory: 128Mi
     limits:
       cpu: 200m
-      memory: 256Mi
+      memory: 200Mi
+
+  # Ingress for Grafana (Reusing NGINX Ingress)
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - grafana.localhost # Placeholder. User can map this to the ELB IP in /etc/hosts or use port-forwarding.
+    path: /
 
 prometheus:
   prometheusSpec:
-    retention: 6h
-    scrapeInterval: 30s
-    evaluationInterval: 30s
+    # Retention
+    retention: 5d
+    
+    # Storage - using small PVC for persistence
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp2 # or gp3 if available default
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+
+    # Resource caps
     resources:
       requests:
-        cpu: 100m
-        memory: 256Mi
+        cpu: 200m
+        memory: 400Mi
       limits:
-        cpu: 300m
-        memory: 512Mi
+        cpu: 500m
+        memory: 1000Mi
 
 alertmanager:
   enabled: true
   alertmanagerSpec:
     resources:
       requests:
-        cpu: 50m
+        cpu: 10m
         memory: 128Mi
+      limits:
+        cpu: 50m
+        memory: 100Mi
+
+# Disable components we might not need immediately to save resources
+nodeExporter:
+  enabled: true # Essential for SRE signals
+kubeStateMetrics:
+  enabled: true # Essential for HPA logging etc

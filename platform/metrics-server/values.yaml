@@ -1,0 +1,32 @@
+# Production-grade values for Metrics Server
+# Chart: metrics-server/metrics-server
+
+# High Availability (at least 2 replicas for production)
+replicas: 2
+
+apiService:
+  create: true
+
+# Arguments often needed for EKS networking
+args:
+  - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+  - --kubelet-use-node-status-port
+  - --metric-resolution=15s
+
+# Resources are critical for stability
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+  limits:
+    cpu: 200m
+    memory: 400Mi
+
+# Pod Disruption Budget to ensure availability during node upgrades
+pdb:
+  create: true
+  minAvailable: 1
+
+serviceAccount:
+  create: true
+  name: metrics-server

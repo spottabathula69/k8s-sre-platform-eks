@@ -1,0 +1,48 @@
+# Production-grade values for NGINX Ingress on EKS
+# Chart: ingress-nginx/ingress-nginx
+
+controller:
+  # High Availability
+  replicaCount: 2
+  
+  # Resource Management
+  resources:
+    requests:
+      cpu: 100m
+      memory: 90Mi
+    limits:
+      cpu: 500m
+      memory: 500Mi
+
+  # Service Configuration (AWS LoadBalancer)
+  service:
+    enabled: true
+    type: LoadBalancer
+    annotations:
+      # Use a Classic Load Balancer (ELB) for lowest cost/simple setup in public subnets
+      service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
+      # Connection draining for zero-downtime updates
+      service.beta.kubernetes.io/aws-load-balancer-connection-draining-enabled: "true"
+      service.beta.kubernetes.io/aws-load-balancer-connection-draining-timeout: "60"
+
+  # Metrics for Observability Stack later
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: false  # We will enable this when we install Prometheus Operator
+    prometheusRule:
+      enabled: false
+
+  # Ingress Class
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+    controllerValue: "k8s.io/ingress-nginx"
+
+  # Lifecycle
+  lifecycle:
+    preStop:
+      exec:
+        command:
+          - /wait-shutdown

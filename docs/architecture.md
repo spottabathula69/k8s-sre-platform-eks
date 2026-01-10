@@ -14,14 +14,15 @@
 - IAM + OIDC provider for IRSA (Kubernetes service accounts assume AWS roles)
 
 ### Kubernetes Platform
-- Ingress controller (AWS Load Balancer Controller or NGINX; chosen for cost/ops tradeoff)
+- Ingress controller: **NGINX** (Classic ELB)
+  - Chosen for cost efficiency (avoids ALB per ingress) & portability.
 - Observability: kube-prometheus-stack
   - Prometheus for scraping metrics
   - Grafana for dashboards
-  - Alertmanager for alerts/routing
+  - Alertmanager for warnings
 
 ### Application
-- `demo-api` deployed via Helm
+- `podinfo` (Sample App) deployed via Helm
   - requests/limits
   - readiness/liveness probes
   - rolling update strategy

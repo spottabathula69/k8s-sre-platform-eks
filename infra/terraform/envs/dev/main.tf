@@ -1,6 +1,10 @@
 # NOTE: Step 1 is scaffolding only.
 # In Step 2/3 we will implement modules/vpc and modules/eks and wire them here.
 
+data "http" "my_ip" {
+  url = "http://ipv4.icanhazip.com"
+}
+
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -29,6 +33,6 @@ module "eks" {
   node_capacity_type  = var.node_capacity_type
   node_subnet_type    = var.node_subnet_type
 
-  cluster_public_access_cidrs = var.cluster_public_access_cidrs
+  cluster_public_access_cidrs = ["${chomp(data.http.my_ip.response_body)}/32"]
 }
 
